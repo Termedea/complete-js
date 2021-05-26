@@ -109,6 +109,7 @@ f(); // f has now owner, just a regular function = this = undefined. */
 
 /* #endregion */
 
+/* #region  S8E98 Functions vs Arrow functions */
 //not a code block - not own scope!! Object literal != own scope.
 // const person = {
 //   firstName: 'Mikaela',
@@ -148,26 +149,66 @@ f(); // f has now owner, just a regular function = this = undefined. */
 // person.greet();
 
 //arguments keyword doesn't exist on arrow functions either (just as this)
-const addExpr = function (a, b) {
-  console.log(arguments); //everything sent to the function
+// const addExpr = function (a, b) {
+//   console.log(arguments); //everything sent to the function
+// };
+
+// addExpr(1, 2, 3, 4, 5);
+
+// const addArrow = (a, b) => {
+//   console.log(arguments); //no access to arguments
+// };
+
+// addArrow(1, 2, 3);
+
+// //Object is a code block.
+// class Person {
+//   firstName = 'Tobias';
+//   year = 1983;
+
+//   greet = () => {
+//     console.log(`Hey ${this.firstName}`);
+//   };
+// }
+
+// new Person().greet();
+/* #endregion */
+
+/* #region  S8L100 */
+let lastName = 'Williams';
+let oldLastName = lastName;
+
+lastName = 'Davis'; //oldLastName gets a new piece of memory
+console.log(lastName, oldLastName);
+
+const person = {
+  name: 'Mikaela',
+  age: 35,
+  family: ['Alice', 'Bob'] //object
 };
 
-addExpr(1, 2, 3, 4, 5);
+console.log('-- friend = person --');
+const friend = person;
+friend.age = 41; //friend is changable, even though it's a const, because we don't change the value in the stack. The value in the stack is the reference to the object which hasn't changed.
+console.log('person', person); //both gets the new age, because the variable names are just references to the same object in the stack.
+console.log('friend', friend);
 
-const addArrow = (a, b) => {
-  console.log(arguments); //no access to arguments
-};
+//copying objects with Object.assign
+console.log('-- object.assign --');
+const friend2 = Object.assign({}, person); //real copy. A new object was created and its properties was copied into the new object. Only works on one level (shallow copy).
 
-addArrow(1, 2, 3);
+friend2.name = 'Tobias';
+friend2.family.push('Conrad'); //manipulating object within object - will have the same reference in stack and change everywhere.
+friend2.family.push('Mary');
+console.log('person', person);
+console.log('friend2', friend2);
 
-//Object is a code block.
-class Person {
-  firstName = 'Tobias';
-  year = 1983;
+console.log('-- destructing --');
+const friend3 = { ...person };
+friend3.age = 33;
+friend3.family.push('John');
+console.log('person', person);
+console.log('friend3', friend3);
 
-  greet = () => {
-    console.log(`Hey ${this.firstName}`);
-  };
-}
-
-new Person().greet();
+///lodash has functions for deep cloning)
+/* #endregion */
